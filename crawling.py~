@@ -1,0 +1,53 @@
+import time
+import StringIO
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
+
+ 
+def init_driver():
+    driver = webdriver.Firefox()
+    driver.wait = WebDriverWait(driver, 5)
+    return driver
+ 
+ 
+def lookup(driver, query):
+    driver.get("http://164.100.180.4/searchengine/SearchEngineEnglish.aspx")
+    radio=driver.find_element_by_id("RdlSearch_0")
+    driver.execute_script("arguments[0].click();", radio)
+    select = Select(driver.find_element_by_id('ddlDistricts'))
+    select.select_by_visible_text('Faizabad')
+    inputElement = driver.find_element_by_id("txtEPICNo")
+    inputElement.send_keys(query)
+    button = driver.wait.until(EC.element_to_be_clickable(
+    	(By.NAME, "Button1")))
+    button.click()
+    table=driver.find_element_by_id("gvSearchResult")
+    cells = row.find_elements_by_tag_name("td")
+    result=list()
+    i=0
+    for cell in cells:
+    	if i<4:
+    		i+=1
+    		continue
+        value = cell.string
+        try:
+        	result.append(value.encode('ISO-8859-1').encode('utf-8'))
+        except Exception, e:
+        	result.append(value)
+        i+=1	
+resultFile = open(outfile,'ab+')
+f = StringIO()
+wr = unicodecsv.writer(resultFile, dialect='excel')
+wr.writerow(result)
+print result			
+ 
+if __name__ == "__main__":
+    driver = init_driver()
+    f = open('epic_no.txt', 'r')
+    for row in f:
+    	lookup(driver,row)
+    time.sleep(5)
+    driver.quit()
