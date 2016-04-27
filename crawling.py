@@ -8,7 +8,7 @@ from cStringIO import StringIO
 from multiprocessing.dummy import Pool as ThreadPool
 
 
-#base url to search our date from given EPICNo, our district is faizabad and area is goishazganz
+#base url to search our date from given EPICNo, our district is faizabad and area is goshainganz
 url= 'http://164.100.180.4/searchengine/SearchEngineEnglish.aspx'
 
 #Request Headers sent to EC Website 
