@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import urllib
-import pdb
 import csv
 import unicodecsv
 from cStringIO import StringIO
